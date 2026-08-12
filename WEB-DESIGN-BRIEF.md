@@ -1,0 +1,14 @@
+# Contrato de diseño web · Guía 5 (TGS → Arquitectura → IA)
+
+- **Usuario y tarea primaria:** ingeniero o desarrollador que ya construye software y necesita el vocabulario sistémico para diagnosticar su arquitectura y decidir cómo integra un subsistema de IA sin perder control.
+- **Jerarquía:** diagnóstico de síntomas → tres olas de la TGS → mapa evolutivo de la arquitectura → el salto probabilístico → lectura sistémica de la IA → simulador → homeostasis cognitiva → micro-reto → verificación → glosario.
+- **Dirección visual:** modo oscuro tipo IDE. Superficies `#070a0f`/`#0b1119`, paneles con barra de ventana, tipografía monoespaciada (JetBrains Mono) para instrumentos y etiquetas, Inter para prosa. Acento por ola: ámbar (Ola 1), cian (Ola 2), violeta (Ola 3).
+- **Tono:** de ingeniero a ingeniero. Primero el porqué sistémico, después el cómo técnico. Sin analogías infantiles y sin vender certezas que no existen: donde hay debate abierto (capacidades emergentes) se declara.
+- **Componentes reutilizables:** panel de IDE (`.panel`), insignia de ola (`.chip--w*`), bloque de código con `pre-wrap`, aviso tipográfico (`.callout`), tabla con desplazamiento propio, tarjeta (`.card`), acordeón (`details.acc`).
+- **Estados requeridos:** sin selección en el diagnóstico; simulador en reposo, corrigiendo, en homeostasis, perturbado, en lazo abierto, estancado y divergente; micro-reto vacío, parcial, con señuelo colocado y completo; verificación sin responder, respondida y cerrada; glosario con y sin coincidencias; islas sin Vue y grafo sin Mermaid.
+- **Responsive:** 320, 390, 768, 1024, 1440, 1920 y 2560 px. Sin desplazamiento horizontal de página: el mapa SVG, el grafo Mermaid, las tablas y los bloques de código llevan su propio contenedor con desplazamiento.
+- **Accesibilidad:** objetivo WCAG 2.2 AA. Enlace de salto, navegación por teclado en pestañas de ola (flechas), en el mapa evolutivo (flechas) y en el micro-reto (seleccionar y pulsar como alternativa al arrastre). Regiones `aria-live` en diagnóstico, bitácora del simulador y veredicto del reto. Insignias con fondo sólido y estados que no dependen sólo del color.
+- **Movimiento:** el pulso de la topología y las transiciones se anulan bajo `prefers-reduced-motion: reduce`.
+- **Privacidad:** todo el procesamiento es local. El progreso opcional vive en `localStorage` (`tgs.guia5.v1`). No hay envío de datos, analítica ni credenciales.
+- **Degradación:** sin JavaScript se lee la guía completa y cada artefacto declara su requisito. Si Vue no carga, las islas se sustituyen por un aviso; si Mermaid no carga, el grafo remite a la línea evolutiva, que no tiene dependencias.
+- **Criterio de salida:** el aprendiz puede responder, sobre su propio sistema, dónde está la frontera, qué sensor mide la desviación, qué actuador corrige y qué abre el lazo cuando la corrección empeora las cosas.

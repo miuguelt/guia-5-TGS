@@ -1,0 +1,1506 @@
+<!doctype html>
+<html lang="es-CO">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="description"
+      content="Guía interactiva de Teoría General de Sistemas para ingenieros: las tres olas de la TGS, la evolución sistémica de la arquitectura de software y la Inteligencia Artificial leída como sistema complejo adaptativo. Incluye simulador de red neuronal y micro-reto de arquitectura."
+    />
+    <meta name="author" content="Guía 5 · Formación en Análisis y Desarrollo de Software" />
+    <title>Guía 5 · TGS → Arquitectura → IA</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Tailwind se usa como capa de utilidades; la hoja propia es autosuficiente. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      if (window.tailwind) {
+        window.tailwind.config = {
+          corePlugins: { preflight: false },
+          theme: {
+            extend: {
+              colors: {
+                w1: "#fbbf24",
+                w2: "#22d3ee",
+                w3: "#a78bfa",
+                ide: { 900: "#070a0f", 800: "#0b1119", 700: "#101a24", 600: "#16222f" },
+              },
+              fontFamily: {
+                mono: ['"JetBrains Mono"', "ui-monospace", "monospace"],
+                sans: ['"Inter"', "system-ui", "sans-serif"],
+              },
+            },
+          },
+        };
+      }
+    </script>
+
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.5.13/dist/vue.global.prod.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.3/dist/mermaid.min.js" defer></script>
+
+    <script src="js/content.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/evolution-map.js" defer></script>
+    <script src="js/neural-sim.js" defer></script>
+    <script src="js/architecture-lab.js" defer></script>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido principal</a>
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+    <!-- ===================================================================
+         Encabezado
+         =================================================================== -->
+    <header class="site-header">
+      <div class="wrap hdr">
+        <a class="brand" href="#inicio" aria-label="Inicio de la Guía 5">
+          <span class="brand-mark" aria-hidden="true">TGS</span>
+          <span class="brand-copy">
+            <strong>
+              <span class="brand-short">Guía 5 · TGS</span>
+              <span class="brand-long">Guía 5 · Teoría General de Sistemas</span>
+            </strong>
+            <small>tgs → arquitectura de software</small>
+          </span>
+        </a>
+
+        <nav class="nav" id="nav-desktop" aria-label="Navegación principal">
+          <a class="nav-a" href="#reflexion">01 · Reflexión</a>
+          <a class="nav-a" href="#olas">02 · Tres olas</a>
+          <a class="nav-a" href="#evolucion">03 · Evolución</a>
+          <a class="nav-a" href="#salto">04 · El salto</a>
+          <a class="nav-a" href="#ia">05 · La pieza final</a>
+          <a class="nav-a" href="#ejercicios">06 · Ejercicios</a>
+          <a class="nav-a" href="#simulador">07 · Simulador</a>
+          <a class="nav-a" href="#homeostasis">08 · Agentes</a>
+          <a class="nav-a" href="#reto">08 · Micro-reto</a>
+          <a class="nav-a" href="#verificacion">09 · Verificación</a>
+        </nav>
+
+        <button
+          class="nav-toggle"
+          id="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="nav-drawer"
+        >
+          <i class="fa-solid fa-bars" aria-hidden="true"></i> Módulos
+        </button>
+
+        <div class="hdr-side">
+          <span class="hdr-status">
+            <span class="dot-live" aria-hidden="true"></span>
+            <span>runtime pedagógico activo</span>
+          </span>
+        </div>
+      </div>
+
+      <nav class="nav-drawer" id="nav-drawer" aria-label="Navegación por módulos" hidden>
+        <a class="nav-a" href="#reflexion">01 · Reflexión</a>
+        <a class="nav-a" href="#olas">02 · Tres olas de la TGS</a>
+        <a class="nav-a" href="#evolucion">03 · Evolución del software</a>
+        <a class="nav-a" href="#salto">04 · El salto probabilístico</a>
+        <a class="nav-a" href="#ia">05 · La pieza final</a>
+        <a class="nav-a" href="#ejercicios">06 · Ejercicios prácticos</a>
+        <a class="nav-a" href="#simulador">07 · Simulador sistémico</a>
+        <a class="nav-a" href="#homeostasis">08 · Homeostasis cognitiva</a>
+        <a class="nav-a" href="#reto">09 · Micro-reto arquitectónico</a>
+        <a class="nav-a" href="#verificacion">09 · Verificación</a>
+        <a class="nav-a" href="#glosario">10 · Glosario</a>
+      </nav>
+    </header>
+
+    <main id="contenido">
+      <!-- =================================================================
+           Portada
+           ================================================================= -->
+      <section class="wrap hero" id="inicio" aria-labelledby="hero-title">
+        <div>
+          <p class="kicker">Teoría General de Sistemas · ADSO</p>
+          <h1 id="hero-title">
+            Bienvenido al mundo del software.<br />
+            <em>Tu código es parte de un sistema mayor.</em>
+          </h1>
+          <p class="lede">
+            Cuando aprendes a programar, parece que lo más difícil es que el código compile. 
+            Pero pronto descubrirás que el verdadero reto es mantener un conjunto de partes 
+            (archivos, bases de datos, servidores) trabajando juntas sin que el desorden lo destruya. 
+            Esta guía te explica de forma sencilla qué es un sistema y por qué tu software falla cuando crece.
+          </p>
+
+          <div class="btn-row" style="margin-top: 1.6rem">
+            <a class="btn btn--primary" href="#simulador">
+              <i class="fa-solid fa-play" aria-hidden="true"></i> Abrir el simulador
+            </a>
+            <a class="btn" href="#reflexion">
+              <i class="fa-solid fa-terminal" aria-hidden="true"></i> Empezar por el diagnóstico
+            </a>
+          </div>
+
+          <div class="hero-meta">
+            <span class="chip chip--w1">Ola 1 · control</span>
+            <span class="chip chip--w2">Ola 2 · sistemas abiertos</span>
+            <span class="chip chip--w3">Ola 3 · complejidad</span>
+            <span class="chip"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> mapa evolutivo</span>
+            <span class="chip"><i class="fa-solid fa-puzzle-piece" aria-hidden="true"></i> ejercicios</span>
+            <span class="chip"><i class="fa-solid fa-vials" aria-hidden="true"></i> micro-reto</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-bar">
+            <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="panel-title mono">~/tgs — resumen de la guía</span>
+          </div>
+          <div class="panel-body hero-term mono">
+            <div class="ln"><span>01</span><span><span class="t-com">$</span> tgs --explain "arquitectura moderna"</span></div>
+            <div class="ln"><span>02</span><span class="t-com">iniciando lección para ADSO … ok</span></div>
+            <div class="ln"><span>03</span><span class="t-com">cargando conceptos básicos … ok</span></div>
+            <div class="ln"><span>04</span><span class="t-com">mapeando olas → eras de software … ok</span></div>
+            <div class="ln"><span>05</span><span>&nbsp;</span></div>
+            <div class="ln"><span>06</span><span><span class="t-hi">tesis</span> = {</span></div>
+            <div class="ln"><span>07</span><span>&nbsp;&nbsp;<span class="t-str">"un solo archivo"</span>: <span class="t-com">// es un desastre cuando crece</span></span></div>
+            <div class="ln"><span>08</span><span>&nbsp;&nbsp;<span class="t-str">"frontend y backend"</span>: <span class="t-com">// separan responsabilidades</span></span></div>
+            <div class="ln"><span>09</span><span>&nbsp;&nbsp;<span class="t-str">"la pieza final"</span>: <span class="t-com">// resuelve lo que no puedes programar</span></span></div>
+            <div class="ln"><span>10</span><span>}</span></div>
+            <div class="ln"><span>11</span><span>&nbsp;</span></div>
+            <div class="ln"><span>12</span><span class="t-warn">⚠ el software nunca está aislado. Siempre es un sistema.</span></div>
+            <div class="ln"><span>14</span><span><span class="t-com">$</span> <span class="dot-live" style="display:inline-block"></span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           01 · Reflexión
+           ================================================================= -->
+      <section class="section section--alt" id="reflexion" aria-labelledby="reflexion-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 01 · Reflexión</p>
+            <h2 id="reflexion-title">
+              Los problemas ocultos del software.<br />
+              <span>¿Por qué el código se rompe?</span>
+            </h2>
+            <p class="lede">
+              Como aprendiz, seguro has notado que arreglar un error a veces crea tres errores nuevos. 
+              Estos no son fallos de tu lógica, son propiedades de los sistemas. Selecciona los síntomas 
+              que hayas vivido al programar para descubrir qué propiedad sistémica los está causando.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-bar">
+              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="panel-title mono">diagnóstico-sistémico.exec</span>
+              <span class="spacer"></span>
+              <span class="mono">local · sin envío de datos</span>
+            </div>
+            <div class="panel-body">
+              <div id="reflection-app" v-cloak>
+                <div class="symptoms" role="group" aria-label="Síntomas observados en tu sistema">
+                  <button
+                    v-for="s in symptoms"
+                    :key="s.id"
+                    type="button"
+                    class="symptom"
+                    :aria-pressed="String(picked.includes(s.id))"
+                    @click="toggle(s.id)"
+                  >
+                    <span class="s-box" aria-hidden="true">✓</span>
+                    <span>{{ s.text }}</span>
+                  </button>
+                </div>
+
+                <div v-if="picked.length === 0" class="callout callout--note" style="margin-bottom: 0">
+                  <p class="callout-title"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> sin selección</p>
+                  <p style="margin: 0">
+                    Selecciona al menos un síntoma. El diagnóstico no evalúa tu código: nombra la propiedad
+                    del sistema que lo está produciendo.
+                  </p>
+                </div>
+
+                <div v-else aria-live="polite">
+                  <p class="mono mute" style="margin: 1.2rem 0 0.6rem; font-size: 0.74rem; letter-spacing: 0.08em">
+                    // {{ results.length }} PATRÓN(ES) SISTÉMICO(S) IDENTIFICADO(S)
+                  </p>
+                  <div class="grid g2">
+                    <article v-for="d in results" :key="d.key" class="card" :class="'card--' + d.wave">
+                      <span class="chip" :class="'chip--' + d.wave">{{ waveName(d.wave) }}</span>
+                      <h3 style="margin-top: 0.6rem">{{ d.title }}</h3>
+                      <p class="dim" style="font-size: 0.9rem">{{ d.text }}</p>
+                      <p class="mono" style="font-size: 0.78rem; color: var(--emerald); margin: 0">{{ d.lever }}</p>
+                    </article>
+                  </div>
+                </div>
+              </div>
+              <noscript>
+                <p class="js-fallback">
+                  El diagnóstico interactivo requiere JavaScript. El contenido teórico de la guía se lee
+                  completo sin él.
+                </p>
+              </noscript>
+            </div>
+          </div>
+
+          <div class="phases" style="margin-top: 1.5rem" id="fases">
+            <article class="phase">
+              <h3>Reflexión</h3>
+              <p>Reconocer que los errores en tu código a menudo son problemas de organización, no de lógica.</p>
+            </article>
+            <article class="phase">
+              <h3>Contextualización</h3>
+              <p>Conocer cómo ha evolucionado la forma de crear software desde los años 50 hasta la Inteligencia Artificial.</p>
+            </article>
+            <article class="phase">
+              <h3>Apropiación</h3>
+              <p>Entender los conceptos básicos jugando con simuladores y respondiendo preguntas sencillas.</p>
+            </article>
+            <article class="phase">
+              <h3>Transferencia</h3>
+              <p>Identificar las partes de una aplicación web real (Frontend, Backend, Base de Datos).</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           02 · Fundamentos y tres olas
+           ================================================================= -->
+      <section class="section" id="olas" aria-labelledby="olas-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 02 · Contextualización</p>
+            <h2 id="olas-title">Fundamentos del software <span>como sistema</span></h2>
+            <p class="lede">
+              Antes de que existieran las computadoras modernas, los científicos ya estudiaban cómo funcionan
+              los sistemas complejos. La Teoría General de Sistemas (TGS) descubrió reglas universales que rigen todo:
+              desde una célula hasta una ciudad. En el software, la TGS explica por qué el código se vuelve inmanejable
+              cuando crece y por qué tuvimos que evolucionar hacia la Inteligencia Artificial para sobrevivir a la complejidad.
+            </p>
+          </div>
+
+          <div class="grid g3" style="margin-bottom: 2rem">
+            <article class="card">
+              <span class="chip"><i class="fa-solid fa-1" aria-hidden="true"></i> definición operativa</span>
+              <h3 style="margin-top: 0.6rem">Un sistema son las relaciones</h3>
+              <p class="dim" style="font-size: 0.9rem; margin: 0">
+                Un sistema es un grupo de partes <strong>conectadas</strong>. En programación, si tienes
+                HTML, CSS y JavaScript sueltos, tienes archivos. Cuando los conectas para que interactúen,
+                tienes una aplicación. La conexión lo es todo.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip"><i class="fa-solid fa-2" aria-hidden="true"></i> propiedad clave</span>
+              <h3 style="margin-top: 0.6rem">El todo no es la suma</h3>
+              <p class="dim" style="font-size: 0.9rem; margin: 0">
+                Puedes tener un formulario HTML perfecto y una base de datos bien diseñada. Pero si el
+                código que los une falla, la aplicación completa está rota. El comportamiento global depende
+                de cómo se comunican las partes.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip"><i class="fa-solid fa-3" aria-hidden="true"></i> consecuencia</span>
+              <h3 style="margin-top: 0.6rem">Cuidado al cambiar cosas</h3>
+              <p class="dim" style="font-size: 0.9rem; margin: 0">
+                A veces, al intentar "mejorar" una función, rompemos otra que dependía de ella.
+                En un sistema, no puedes modificar una pieza importante sin pensar en cómo afectará
+                al resto del código.
+              </p>
+            </article>
+          </div>
+
+          <div class="callout callout--law">
+            <p class="callout-title"><i class="fa-solid fa-scale-balanced" aria-hidden="true"></i> El problema de crecer</p>
+            <p style="margin-bottom: 0.5rem">
+              <strong>Tu código debe estar preparado para el mundo real.</strong> A medida que un programa 
+              se vuelve más útil, los usuarios harán cosas más inesperadas. Si tu código solo espera 
+              comportamientos perfectos, fallará.
+            </p>
+            <p class="dim" style="margin-bottom: 0">
+              Esta es la razón por la que la programación moderna usa Inteligencia Artificial y múltiples 
+              capas de seguridad. A veces, hay tantos posibles errores que no puedes programar "if" 
+              para todos ellos. Necesitas sistemas que sepan adaptarse solos.
+            </p>
+          </div>
+
+          <h3 style="margin: 3rem 0 1rem; font-size: 1.5rem">Diccionario TGS para el Desarrollador</h3>
+          <p class="dim" style="margin-bottom: 1.5rem">
+            No hablemos de biología ni termostatos. Traduzcamos los principios de la Teoría General de Sistemas directamente a tu trabajo diario:
+          </p>
+
+          <div class="grid g2" style="margin-bottom: 3rem;">
+            <article class="card">
+              <span class="chip chip--w1"><i class="fa-solid fa-door-closed" aria-hidden="true"></i> Frontera del Sistema</span>
+              <p class="dim" style="font-size: 0.9rem; margin: 0.6rem 0 0">
+                La línea de defensa. En código, es tu <strong>API</strong> y tus validaciones (ej. <code>if(edad &lt; 0) error</code>). Todo lo que entra debe ser filtrado; si no defines fronteras fuertes, datos corruptos destruirán la base de datos.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip chip--w1"><i class="fa-solid fa-recycle" aria-hidden="true"></i> Entropía y Negentropía</span>
+              <p class="dim" style="font-size: 0.9rem; margin: 0.6rem 0 0">
+                <strong>Entropía</strong> es la tendencia natural del código a volverse espagueti (desorden) por parches rápidos. La <strong>Negentropía</strong> es el tiempo que inviertes <em>refactorizando</em> para limpiar ese desorden antes de que sea fatal.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip chip--w2"><i class="fa-solid fa-heart-pulse" aria-hidden="true"></i> Homeostasis</span>
+              <p class="dim" style="font-size: 0.9rem; margin: 0.6rem 0 0">
+                Mantenerse vivo ante el estrés. En software se llama <strong>Tolerancia a fallos</strong> o Auto-escalado. Si 10,000 usuarios entran de golpe, el sistema prende más servidores o rechaza conexiones ordenadamente para no colapsar.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip chip--w3"><i class="fa-solid fa-microchip" aria-hidden="true"></i> Ley de Variedad Requerida</span>
+              <p class="dim" style="font-size: 0.9rem; margin: 0.6rem 0 0">
+                "Sólo la variedad destruye variedad" (Ashby). Si tus usuarios tienen infinitas formas de equivocarse, 100 condicionales (IFs) no bastarán. Necesitas un regulador con igual variedad: <strong>La Inteligencia Artificial</strong>.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip chip--w3"><i class="fa-solid fa-diagram-project" aria-hidden="true"></i> Equifinalidad</span>
+              <p class="dim" style="font-size: 0.9rem; margin: 0.6rem 0 0">
+                Varios caminos llevan al mismo resultado. En desarrollo backend esto se llama <strong>Idempotencia</strong>: Si la red falla y envías el pago 3 veces, el sistema inteligente cobra solo una vez, asegurando un estado final correcto sin importar el camino torpe.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip chip--w2"><i class="fa-solid fa-bug" aria-hidden="true"></i> Emergencia</span>
+              <p class="dim" style="font-size: 0.9rem; margin: 0.6rem 0 0">
+                El sistema entero hace cosas que las partes sueltas no pueden. A veces es genial (un modelo de IA que empieza a "razonar"), a veces es una pesadilla (un <strong>bug crítico</strong> que solo ocurre cuando API, Base de Datos y Red interactúan a cierta hora).
+              </p>
+            </article>
+          </div>
+
+          <!-- Explorador de olas (isla Vue) -->
+          <div id="wave-explorer" v-cloak style="margin-top: 2rem">
+            <div class="wave-tabs" role="tablist" aria-label="Las tres olas de la Teoría General de Sistemas">
+              <button
+                v-for="(w, i) in waves"
+                :key="w.id"
+                type="button"
+                class="wave-tab"
+                role="tab"
+                :id="'tab-' + w.id"
+                :aria-selected="String(i === active)"
+                :aria-controls="'panel-' + w.id"
+                :tabindex="i === active ? 0 : -1"
+                :style="{ '--tab': w.color }"
+                @click="active = i"
+                @keydown="onKey($event, i)"
+              >
+                <span class="wt-id">{{ w.code }}</span>
+                <span class="wt-name">{{ w.name }}</span>
+                <span class="wt-sub mono">{{ w.sub }}</span>
+              </button>
+            </div>
+
+            <div
+              class="wave-grid"
+              role="tabpanel"
+              :id="'panel-' + current.id"
+              :aria-labelledby="'tab-' + current.id"
+            >
+              <div class="panel">
+                <div class="panel-bar">
+                  <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                  <span class="panel-title mono">{{ current.id }}/tesis.md</span>
+                  <span class="spacer"></span>
+                  <span class="chip" :class="'chip--' + current.id">{{ current.metric }}</span>
+                </div>
+                <div class="panel-body">
+                  <p style="font-size: 1.05rem"><strong>{{ current.thesis }}</strong></p>
+                  <dl style="margin: 0">
+                    <div class="kv"><dt>Concepto núcleo</dt><dd>{{ current.core }}</dd></div>
+                    <div class="kv"><dt>Qué regula</dt><dd>{{ current.regulates }}</dd></div>
+                    <div class="kv"><dt>Analogía de ingeniería</dt><dd>{{ current.analogy }}</dd></div>
+                    <div class="kv"><dt>Modo de fallo característico</dt><dd>{{ current.failure }}</dd></div>
+                    <div class="kv"><dt>Huella en software</dt><dd>{{ current.software }}</dd></div>
+                    <div class="kv"><dt>Referencias</dt><dd class="dim">{{ current.authors }}</dd></div>
+                  </dl>
+                </div>
+              </div>
+
+              <figure class="code" style="margin: 0">
+                <figcaption>
+                  <i class="fa-solid fa-code" aria-hidden="true"></i> {{ current.code.caption }}
+                </figcaption>
+                <pre v-html="current.code.html"></pre>
+              </figure>
+            </div>
+          </div>
+
+          <div class="grid g2" style="margin-top: 1.75rem">
+            <details class="acc">
+              <summary>¿Por qué el código se vuelve feo con el tiempo?</summary>
+              <div class="acc-body">
+                <p>
+                  A esto se le llama "entropía". Es la tendencia natural del código a volverse un 
+                  desorden si solo agregas cosas sin limpiar. Si un grupo de aprendices trabaja en 
+                  el mismo archivo añadiendo funciones a la carrera, pronto nadie entenderá el archivo.
+                </p>
+                <p>
+                  Para combatir esto existe la "Refactorización". Consiste en reescribir y limpiar el código 
+                  (sin cambiar lo que hace) para mantenerlo ordenado. Ordenar cuesta esfuerzo, pero si no 
+                  lo haces, el proyecto terminará siendo imposible de modificar.
+                </p>
+                <p style="margin-bottom: 0">
+                  Separar tu proyecto en <strong>Frontend, Backend y Base de Datos</strong> es la principal 
+                  forma de mantener el orden y evitar este caos.
+                </p>
+              </div>
+            </details>
+
+            <details class="acc">
+              <summary>De programar reglas a entrenar IA</summary>
+              <div class="acc-body">
+                <p>
+                  En la programación tradicional, tú le dices a la computadora exactamente qué hacer paso 
+                  a paso: <em>"si pasa esto, haz aquello"</em>.
+                </p>
+                <p>
+                  Pero algunas tareas son muy complejas para reglas estrictas, como reconocer la voz o 
+                  recomendar películas. Aquí entra la <strong>Inteligencia Artificial</strong>. En lugar de 
+                  darle reglas estrictas, le damos ejemplos y dejamos que aprenda patrones por sí sola.
+                </p>
+                <p style="margin-bottom: 0">
+                  Hoy en día, las aplicaciones combinan ambas cosas: reglas estrictas para lo seguro (como 
+                  guardar una contraseña) e IA para lo complejo (como detectar si un correo es spam).
+                </p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           03 · Evolución del software
+           ================================================================= -->
+      <section class="section section--alt" id="evolucion" aria-labelledby="evo-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 02 · Contextualización</p>
+          <div class="sec-head">
+            <h2 id="evo-title">La evolución del desarrollo de software <span>· el camino hacia la IA</span></h2>
+            <p class="lede">
+              Aprende cómo hemos pasado de escribir todo en un solo archivo a usar aplicaciones divididas 
+              y, finalmente, a usar Inteligencia Artificial para resolver problemas que el código no puede.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-bar">
+              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="panel-title mono">mapa-evolutivo.svg — TGS ↔ arquitectura</span>
+              <span class="spacer"></span>
+              <span class="mono">infografía generativa</span>
+            </div>
+            <div class="panel-body">
+              <div class="map-toolbar">
+                <button class="btn btn--sm" type="button" id="map-view-timeline" aria-pressed="true">
+                  <i class="fa-solid fa-timeline" aria-hidden="true"></i> Línea evolutiva
+                </button>
+                <button class="btn btn--sm" type="button" id="map-view-graph" aria-pressed="false">
+                  <i class="fa-solid fa-diagram-project" aria-hidden="true"></i> Grafo Mermaid
+                </button>
+                <span class="chip chip--w1">Ola 1</span>
+                <span class="chip chip--w2">Ola 2</span>
+                <span class="chip chip--w3">Ola 3</span>
+              </div>
+
+              <div id="map-timeline">
+                <div class="map-scroll" id="map-host" role="img" aria-label="Mapa evolutivo paralelo entre las olas de la TGS y las eras de la arquitectura de software"></div>
+                <p class="mono mute" style="font-size: 0.72rem; margin: 0.6rem 0 0">
+                  // usa las flechas ← → para recorrer las eras cuando el mapa tenga el foco
+                </p>
+                <div class="map-detail" id="map-detail" aria-live="polite"></div>
+              </div>
+
+              <div id="map-graph" hidden>
+                <div class="mermaid-host" id="mermaid-host"></div>
+                <p class="mono mute" style="font-size: 0.72rem; margin: 0.6rem 0 0">
+                  // el grafo se renderiza con Mermaid; si el CDN no está disponible, usa la línea evolutiva
+                </p>
+              </div>
+
+              <noscript>
+                <p class="js-fallback">
+                  El mapa evolutivo se genera con JavaScript. La tabla siguiente contiene la misma
+                  correspondencia en formato estático.
+                </p>
+              </noscript>
+            </div>
+          </div>
+
+          <h3 style="margin: 2rem 0 0.75rem; font-size: 1.2rem">Las cuatro fases de la programación</h3>
+
+          <div class="grid g2">
+            <article class="card card--w1">
+              <span class="chip chip--w1">Fase 1 · Todo en uno</span>
+              <h3 style="margin-top: 0.6rem">El "Monolito" (Un solo archivo/proyecto gigante)</h3>
+              <p class="dim" style="font-size: 0.92rem">
+                Es como hacer un sitio web poniendo el HTML, CSS, JavaScript y las conexiones a base de datos 
+                en el mismo archivo `index.php` gigante. Es fácil empezar, pero imposible de mantener.
+              </p>
+              <p class="dim" style="font-size: 0.92rem; margin-bottom: 0">
+                <strong>El problema:</strong> Código espagueti. Cambiar el color de un botón 
+                rompe el formulario de registro. Nadie quiere tocar el código por miedo a romperlo todo.
+              </p>
+            </article>
+
+            <article class="card card--w2">
+              <span class="chip chip--w2">Fase 2 · Separación de responsabilidades</span>
+              <h3 style="margin-top: 0.6rem">Frontend y Backend (Arquitectura dividida)</h3>
+              <p class="dim" style="font-size: 0.92rem">
+                Los desarrolladores entendieron que había que separar las cosas. Ahora tenemos una carpeta 
+                para la vista (HTML/CSS) y otra para el servidor (PHP/Node.js). Se comunican a través de peticiones.
+              </p>
+              <p class="dim" style="font-size: 0.92rem; margin-bottom: 0">
+                <strong>El problema:</strong> Conexiones lentas o caídas. Si el Backend se apaga, 
+                el Frontend muestra una pantalla en blanco. Hay que programar qué hacer si la red falla (usar <code>try/catch</code>).
+              </p>
+            </article>
+
+            <article class="card card--w3">
+              <span class="chip chip--w3">Fase 3 · Sistemas que se cuidan a sí mismos</span>
+              <h3 style="margin-top: 0.6rem">Aplicaciones en la Nube</h3>
+              <p class="dim" style="font-size: 0.92rem">
+                Ya no es solo Frontend y Backend, ahora las aplicaciones corren en servidores que se 
+                reinician solos si fallan (como Docker o servicios de AWS). Si hay muchos usuarios, 
+                se clonan automáticamente para no colapsar.
+              </p>
+              <p class="dim" style="font-size: 0.92rem; margin-bottom: 0">
+                <strong>El problema:</strong> Demasiadas cosas moviéndose al mismo tiempo. 
+                Es muy difícil rastrear un error porque cuando sucede, el servidor que falló 
+                ya fue destruido y reemplazado por uno nuevo.
+              </p>
+            </article>
+
+            <article class="card" style="border-top: 2px solid var(--emerald)">
+              <span class="chip chip--ok">Fase 4 · El salto de la IA</span>
+              <h3 style="margin-top: 0.6rem">Inteligencia Artificial</h3>
+              <p class="dim" style="font-size: 0.92rem">
+                Cuando los usuarios empezaron a subir fotos y pedir respuestas "en lenguaje humano", 
+                los programadores no podían escribir "if/else" para cada palabra o píxel. 
+                La solución: usar algoritmos que <em>aprenden</em> en lugar de algoritmos que siguen órdenes ciegas.
+              </p>
+              <p class="dim" style="font-size: 0.92rem; margin-bottom: 0">
+                <strong>El cambio clave:</strong> En lugar de programar la solución al problema paso a paso, 
+                programas a una IA para que ella misma descubra la solución viendo ejemplos.
+              </p>
+            </article>
+          </div>
+
+          <div class="tbl-wrap" style="margin-top: 1.5rem">
+            <table class="matrix">
+              <caption class="sr-only">
+                Correspondencia entre principios de la Teoría General de Sistemas y prácticas de ingeniería de software
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Principio TGS</th>
+                  <th scope="col">Traducción en ingeniería</th>
+                  <th scope="col">Artefacto concreto</th>
+                  <th scope="col">Síntoma si falta</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Frontera del sistema</th>
+                  <td>Interfaz pública, propiedad del dato, política de admisión</td>
+                  <td class="mono">API versionada, esquema, validación de entrada</td>
+                  <td>Cambiar un servicio rompe otro que no lo llama</td>
+                </tr>
+                <tr>
+                  <th scope="row">Cohesión / acoplamiento</th>
+                  <td>Un módulo, un propósito; una dependencia, un contrato</td>
+                  <td class="mono">Contexto delimitado, prueba de contrato</td>
+                  <td>Despliegues coordinados entre varios equipos</td>
+                </tr>
+                <tr>
+                  <th scope="row">Retroalimentación negativa</th>
+                  <td>Medir, comparar con un objetivo y corregir</td>
+                  <td class="mono">SLO + escalado automático + cortacircuito</td>
+                  <td>La corrección depende de que alguien esté despierto</td>
+                </tr>
+                <tr>
+                  <th scope="row">Homeostasis</th>
+                  <td>Mantener variables clave en rango ante perturbaciones</td>
+                  <td class="mono">Presupuesto de error, autorreparación, cuotas</td>
+                  <td>Cada pico de tráfico es un incidente</td>
+                </tr>
+                <tr>
+                  <th scope="row">Entropía / negentropía</th>
+                  <td>Reducir ambigüedad estructural con trabajo explícito</td>
+                  <td class="mono">Refactorización, tipos, esquema único de datos</td>
+                  <td>Tres formatos para el mismo dato y ninguno autoritativo</td>
+                </tr>
+                <tr>
+                  <th scope="row">Variedad requerida</th>
+                  <td>El regulador debe igualar la variedad del entorno</td>
+                  <td class="mono">Reglas declarativas, tablas de decisión, modelos</td>
+                  <td>Funciones con decenas de condicionales acumulados</td>
+                </tr>
+                <tr>
+                  <th scope="row">Emergencia</th>
+                  <td>El comportamiento global no se deduce de las partes</td>
+                  <td class="mono">Observabilidad distribuida, ingeniería del caos</td>
+                  <td>Incidentes que ninguna prueba unitaria anticipó</td>
+                </tr>
+                <tr>
+                  <th scope="row">Equifinalidad</th>
+                  <td>Varios caminos válidos hacia el mismo estado final</td>
+                  <td class="mono">Consistencia eventual, idempotencia, reintento seguro</td>
+                  <td>El sistema exige un único orden de eventos para ser correcto</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           04 · El salto
+           ================================================================= -->
+      <section class="section" id="salto" aria-labelledby="salto-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 04 · El salto a la Inteligencia Artificial</p>
+            <h2 id="salto-title">¿Por qué dejamos de <span>programar TODO a mano?</span></h2>
+            <p class="lede">
+              En la programación clásica, tú controlas todo. Si algo falla, sabes exactamente en qué línea de 
+              código fue. ¿Por qué cambiaríamos eso por IA que "adivina"? Porque no teníamos otra opción frente 
+              a estos tres problemas del mundo real.
+            </p>
+          </div>
+
+          <div class="grid g3">
+            <article class="card">
+              <span class="chip chip--w1"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> presión 1</span>
+              <h3 style="margin-top: 0.6rem">Explosión combinatoria de la variedad</h3>
+              <p class="dim" style="font-size: 0.9rem; margin: 0">
+                Detectar fraude con reglas explícitas exige enumerar los patrones del atacante. El atacante
+                genera patrones nuevos más rápido de lo que tú los escribes. La carrera está perdida por
+                estructura, no por talento: tu regulador crece linealmente y su variedad crece
+                combinatoriamente.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip chip--w2"><i class="fa-solid fa-database" aria-hidden="true"></i> presión 2</span>
+              <h3 style="margin-top: 0.6rem">Entropía de los datos masivos</h3>
+              <p class="dim" style="font-size: 0.9rem; margin: 0">
+                Texto libre, imágenes, audio y clics no tienen esquema. Son entropía en estado puro para un
+                sistema determinista. No hay `if` que lea una foto. La única forma de extraer orden de esa
+                masa es un proceso que <em>aprenda</em> la estructura en vez de recibirla especificada.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip chip--w3"><i class="fa-solid fa-microchip" aria-hidden="true"></i> presión 3</span>
+              <h3 style="margin-top: 0.6rem">Capacidad de cómputo por fin disponible</h3>
+              <p class="dim" style="font-size: 0.9rem; margin: 0">
+                La retropropagación se popularizó en 1986; el descenso de gradiente es anterior. Faltaba la
+                energía. El cómputo masivamente paralelo hizo económicamente viable pagar el precio
+                negentrópico de ordenar millones de parámetros. La teoría esperó tres décadas a la
+                termodinámica.
+              </p>
+            </article>
+          </div>
+
+          <div class="callout callout--warn" style="margin-top: 1.75rem">
+            <p class="callout-title"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> El intercambio, dicho sin adornos</p>
+            <p style="margin-bottom: 0">
+              Al pasar a lo probabilístico ganas capacidad de absorber variedad no especificable y pierdes
+              derivabilidad causal. Un sistema determinista falla de forma reproducible; uno probabilístico
+              falla con una distribución. Esto no es un defecto de implementación que se arregle con mejores
+              modelos: es una propiedad del tipo de sistema. La respuesta arquitectónica correcta no es
+              confiar más, es <strong>envolver el subsistema probabilístico en fronteras y verificadores
+              deterministas</strong>. Ese es exactamente el objetivo del micro-reto al final de la guía.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           05 · IA sistémica
+           ================================================================= -->
+      <section class="section section--alt" id="ia" aria-labelledby="ia-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 03 · Apropiación</p>
+            <h2 id="ia-title">Desmitificando la IA <span>· Es solo software que aprende</span></h2>
+            <p class="lede">
+              Una Inteligencia Artificial como ChatGPT parece magia, pero en el fondo es solo un programa.
+              La diferencia es que usa ciclos para corregir sus propios errores y mejorar. Veamos cómo
+              lo hace usando conceptos de programación que ya conoces.
+            </p>
+          </div>
+
+          <div class="grid g2">
+            <div class="panel">
+              <div class="panel-bar">
+                <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="panel-title mono">retropropagación = lazo cibernético</span>
+              </div>
+              <div class="panel-body">
+                <p>
+                  Wiener definió el control como un ciclo de cuatro piezas. La retropropagación las
+                  implementa todas, sin excepción y sin metáfora:
+                </p>
+                <dl style="margin: 0">
+                  <div class="kv">
+                    <dt>Planta (el sistema controlado)</dt>
+                    <dd>La red: pesos, sesgos y no linealidades.</dd>
+                  </div>
+                  <div class="kv">
+                    <dt>Sensor</dt>
+                    <dd>La función de pérdida. Convierte «qué tan mal va» en un número comparable.</dd>
+                  </div>
+                  <div class="kv">
+                    <dt>Comparador</dt>
+                    <dd>El gradiente ∇L: dirección y magnitud de la desviación respecto al objetivo.</dd>
+                  </div>
+                  <div class="kv">
+                    <dt>Actuador</dt>
+                    <dd>La actualización θ ← θ − η∇L. Corrige la planta en proporción al error.</dd>
+                  </div>
+                </dl>
+                <p style="margin-top: 1rem">
+                  La diferencia con un termostato es de orden, no de naturaleza: el termostato ajusta una
+                  variable, la red ajusta <strong>su propia función de transferencia</strong>. Eso es
+                  cibernética de segundo orden — un sistema que modifica sus propias reglas de operación.
+                </p>
+                <figure class="code" style="margin-bottom: 0">
+                  <figcaption><i class="fa-solid fa-rotate" aria-hidden="true"></i> el lazo completo, en seis líneas</figcaption>
+                  <pre><span class="t-key">for</span> epoch <span class="t-key">in</span> range(N):
+    y_hat = red.<span class="t-fn">forward</span>(x)          <span class="t-com"># la planta produce salida</span>
+    L     = <span class="t-fn">perdida</span>(y_hat, y)        <span class="t-com"># SENSOR: mide la desviación</span>
+    g     = red.<span class="t-fn">backward</span>(L)          <span class="t-com"># COMPARADOR: hacia dónde corregir</span>
+    theta = theta - eta * g          <span class="t-com"># ACTUADOR: corrige la planta</span>
+    <span class="t-com"># el lazo se repite: retroalimentación NEGATIVA pura</span></pre>
+                </figure>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-bar">
+                <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="panel-title mono">entrenar = comprar orden con energía</span>
+              </div>
+              <div class="panel-body">
+                <p>
+                  La función de pérdida más usada en clasificación se llama <strong>entropía cruzada</strong>,
+                  y el nombre es literal: mide, en bits, cuánta incertidumbre queda entre la distribución
+                  que predice el modelo y la distribución real de los datos.
+                </p>
+                <p>
+                  Entrenar es minimizar esa cantidad. Es decir: <strong>entrenar es un proceso
+                  negentrópico</strong>. El modelo pasa de un estado de máxima incertidumbre —pesos
+                  aleatorios, salida uniforme— a un estado de baja entropía en el que su distribución interna
+                  reproduce la estructura del entorno.
+                </p>
+                <div class="callout callout--note" style="margin: 1rem 0">
+                  <p class="callout-title"><i class="fa-solid fa-fire" aria-hidden="true"></i> Y la segunda ley sigue intacta</p>
+                  <p style="margin-bottom: 0">
+                    El orden local se paga exportando desorden al entorno: calor, consumo eléctrico,
+                    depreciación del hardware. Un centro de datos entrenando es una <strong>estructura
+                    disipativa</strong> en el sentido exacto de Prigogine: mantiene orden interno gracias a un
+                    flujo continuo de energía que degrada. Es el mismo argumento con el que Schrödinger
+                    explicó la vida.
+                  </p>
+                </div>
+                <p style="margin-bottom: 0">
+                  De ahí se deduce algo operativo: si dejas de alimentar el lazo —datos frescos,
+                  reentrenamiento, evaluación— la entropía del entorno vuelve a ganar. Eso tiene nombre
+                  propio en producción: <strong>deriva del modelo</strong>. No es que el modelo se degrade;
+                  es que el entorno se movió y el sistema dejó de ser abierto.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid g2" style="margin-top: 1.25rem">
+            <div class="panel">
+              <div class="panel-bar">
+                <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="panel-title mono">emergencia en modelos de lenguaje</span>
+              </div>
+              <div class="panel-body">
+                <p>
+                  La unidad de un modelo de lenguaje es aritmética elemental: una suma ponderada seguida de
+                  una no linealidad. No hay gramática codificada, ni base de conocimiento, ni motor de
+                  inferencia lógica. Y sin embargo, al escalar el número de elementos y la densidad de sus
+                  interacciones, aparecen capacidades que nadie especificó: traducción, seguimiento de
+                  instrucciones, aprendizaje en contexto, razonamiento por pasos.
+                </p>
+                <p>
+                  Eso es <strong>emergencia</strong> en el sentido estricto de la Ola 3: propiedades del
+                  conjunto ausentes en cada parte y no deducibles de ellas por composición simple.
+                </p>
+                <p>
+                  El mecanismo de atención merece una lectura sistémica propia: define qué elementos se
+                  acoplan con cuáles <em>en cada paso y según el contenido</em>. Es acoplamiento dinámico —
+                  la topología interna del sistema deja de ser fija y pasa a ser una variable de estado.
+                  Autoorganización topológica, no una metáfora de ella.
+                </p>
+                <div class="callout callout--warn" style="margin-bottom: 0">
+                  <p class="callout-title"><i class="fa-solid fa-flask" aria-hidden="true"></i> Honestidad técnica</p>
+                  <p style="margin-bottom: 0">
+                    Existe un debate serio sobre si ciertas «capacidades emergentes» aparecen de forma
+                    realmente abrupta. Schaeffer, Miranda y Koyejo (2023) mostraron que varias de esas curvas
+                    en escalón se suavizan al cambiar métricas discontinuas por métricas continuas: parte del
+                    salto estaría en el instrumento de medición, no en el sistema. El punto sistémico
+                    sobrevive al debate: la capacidad no está escrita en ninguna parte del modelo. Lo que se
+                    discute es la <em>forma</em> de la curva, no la ausencia de especificación.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-bar">
+                <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="panel-title mono">perillas de entropía y modos de fallo</span>
+              </div>
+              <div class="panel-body">
+                <dl style="margin: 0 0 1rem">
+                  <div class="kv">
+                    <dt>Temperatura</dt>
+                    <dd>
+                      Control directo de la entropía del muestreo. Cerca de 0 el sistema es casi determinista
+                      y repetitivo; alta, explora más y se desordena. Es una perilla sistémica, no estética:
+                      decides cuánta variedad admites en la salida.
+                    </dd>
+                  </div>
+                  <div class="kv">
+                    <dt>Ventana de contexto</dt>
+                    <dd>
+                      La frontera perceptiva del sistema. Todo lo que queda fuera, sencillamente no existe
+                      para él. Muchos fallos atribuidos al «modelo» son fallos de diseño de esa frontera.
+                    </dd>
+                  </div>
+                  <div class="kv">
+                    <dt>Recuperación y herramientas</dt>
+                    <dd>
+                      Sensores hacia el entorno. Convierten un sistema cerrado —que sólo consulta su estado
+                      interno— en un sistema abierto capaz de corregirse con información externa.
+                    </dd>
+                  </div>
+                </dl>
+                <div class="callout callout--warn" style="margin: 0">
+                  <p class="callout-title"><i class="fa-solid fa-ghost" aria-hidden="true"></i> La alucinación, en términos de sistemas</p>
+                  <p style="margin-bottom: 0.5rem">
+                    No es un defecto de codificación. Es un <strong>fallo de frontera y de sensado</strong>: el
+                    sistema genera una continuación coherente con su estado interno y no dispone de ningún
+                    canal que le informe que el entorno dice otra cosa. Sin sensor externo no hay señal de
+                    error; sin señal de error no hay corrección posible. El lazo está abierto.
+                  </p>
+                  <p style="margin-bottom: 0" class="dim">
+                    Por eso la mitigación es arquitectónica, no conversacional: recuperación de fuentes,
+                    llamadas a herramientas, verificadores deterministas y esquemas de salida. Se le construye
+                    al sistema el sensor que le falta.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           06 · Ejercicios Prácticos
+           ================================================================= -->
+      <section class="section" id="ejercicios" aria-labelledby="ejercicios-title" style="background-color: var(--c-surface-1);">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 03 · Apropiación · Ejercicios</p>
+            <h2 id="ejercicios-title">Desafíos prácticos</h2>
+            <p class="lede">
+              Antes de pasar al simulador, pongamos a prueba lo que aprendiste sobre Fronteras, Entropía e Inteligencia Artificial.
+            </p>
+          </div>
+          
+          <div id="exercises-app" v-cloak>
+            <div class="quiz-grid" style="grid-template-columns: 1fr;">
+              <div v-for="(ex, i) in exercises" :key="'ex-'+i" class="card">
+                <div class="card-head">
+                  <h3 class="h4" style="margin:0; color:var(--c-accent)">{{ ex.title }}</h3>
+                </div>
+                <div class="card-body">
+                  <p style="margin-bottom: 1.5rem">{{ ex.scenario }}</p>
+                  
+                  <div class="quiz-opts" style="display:flex; flex-direction:column; gap:0.5rem">
+                    <button 
+                      v-for="(opt, j) in ex.options" 
+                      :key="j"
+                      class="btn btn--outline"
+                      :class="{'btn--primary': answered[i] === j}"
+                      @click="answer(i, j)"
+                      :disabled="answered[i] !== null"
+                      style="text-align:left; justify-content:flex-start; white-space:normal; height:auto; padding: 1rem;"
+                    >
+                      <span>{{ opt }}</span>
+                      
+                      <span v-if="answered[i] !== null && verdict(i, j) === 'ok'" style="margin-left:auto; color:var(--c-accent)">
+                        <i class="fa-solid fa-check"></i>
+                      </span>
+                      <span v-if="answered[i] !== null && verdict(i, j) === 'bad'" style="margin-left:auto; color:#ef4444">
+                        <i class="fa-solid fa-xmark"></i>
+                      </span>
+                    </button>
+                  </div>
+                  
+                  <div v-if="answered[i] !== null" class="callout" style="margin-top: 1.5rem">
+                    <div class="callout-icon" :style="{color: answered[i] === ex.correctIndex ? 'var(--c-accent)' : '#ef4444'}">
+                      <i class="fa-solid" :class="answered[i] === ex.correctIndex ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+                    </div>
+                    <div class="callout-body">
+                      <p style="margin:0">
+                        {{ answered[i] === ex.correctIndex ? ex.feedbackGood : ex.feedbackBad }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="btn-row" style="margin-top: 2rem; justify-content: center;" v-if="answered.some(a => a !== null)">
+              <button class="btn" @click="reset">
+                <i class="fa-solid fa-rotate-left"></i> Reiniciar Ejercicios
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           07 · Simulador
+           ================================================================= -->
+      <section class="section" id="simulador" aria-labelledby="sim-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 03 · Apropiación · caja de arena</p>
+            <h2 id="sim-title">Simulador: <span>Entrenando una Inteligencia Artificial</span></h2>
+            <p class="lede">
+              Aquí tienes una IA real aprendiendo en tu navegador. Su objetivo es separar los puntos naranjas de los azules. 
+              Observa cómo <strong>aprende por ensayo y error</strong> (un lazo cerrado). Juega con la dificultad, desconecta su 
+              capacidad de aprender o lánzale datos basura para ver cómo el sistema intenta recuperar el equilibrio.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-bar">
+              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="panel-title mono">ia.sandbox — panel de control interactivo</span>
+              <span class="spacer"></span>
+              <span class="state-badge" id="sim-state" data-state="idle">
+                <i class="fa-solid fa-circle-nodes" aria-hidden="true"></i>
+                <span id="sim-state-text">en reposo</span>
+              </span>
+            </div>
+            <div class="panel-body">
+              <div class="sim">
+                <div class="sim-stage">
+                  <div>
+                    <div class="canvas-box">
+                      <span class="canvas-label">frontera de decisión · espacio de entrada</span>
+                      <canvas id="sim-canvas" width="520" height="520" role="img"
+                        aria-label="Visualización del espacio de entrada con la frontera de decisión aprendida por la red"></canvas>
+                    </div>
+                    <div class="sim-metrics" style="margin-top: 0.7rem">
+                      <div class="metric"><span class="m-lab">intentos</span><span class="m-val" id="m-epoch">0</span></div>
+                      <div class="metric"><span class="m-lab">error (pérdida)</span><span class="m-val" id="m-loss">—</span></div>
+                      <div class="metric"><span class="m-lab">aciertos (%)</span><span class="m-val" id="m-acc">—</span></div>
+                      <div class="metric"><span class="m-lab">corrección</span><span class="m-val" id="m-grad">—</span></div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="canvas-box">
+                      <span class="canvas-label">conexiones · "cerebro" de la ia</span>
+                      <canvas id="net-canvas" width="520" height="300" role="img"
+                        aria-label="Topología de la red mostrando el signo y la magnitud de cada peso"></canvas>
+                    </div>
+                    <div class="canvas-box" style="margin-top: 0.7rem">
+                      <span class="canvas-label">disminución del error en el tiempo</span>
+                      <canvas id="loss-canvas" width="520" height="200" role="img"
+                        aria-label="Curva de la pérdida a lo largo de las épocas de entrenamiento"></canvas>
+                    </div>
+                    <div class="term-log" id="sim-log" role="log" aria-live="polite" aria-label="Bitácora de eventos sistémicos" style="margin-top: 0.7rem"></div>
+                  </div>
+                </div>
+
+                <div class="ctl-panel">
+                  <div class="btn-row">
+                    <button class="btn btn--primary" type="button" id="sim-toggle">
+                      <i class="fa-solid fa-play" aria-hidden="true"></i> <span id="sim-toggle-text">Iniciar</span>
+                    </button>
+                    <button class="btn btn--sm" type="button" id="sim-step">
+                      <i class="fa-solid fa-forward-step" aria-hidden="true"></i> Paso
+                    </button>
+                    <button class="btn btn--sm" type="button" id="sim-reset">
+                      <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Reiniciar
+                    </button>
+                  </div>
+
+                  <div class="ctl">
+                    <label class="ctl-head" for="sim-dataset">
+                      <span>Problema a resolver (Forma de los datos)</span>
+                    </label>
+                    <select id="sim-dataset">
+                      <option value="circle">Círculo — Fácil, solo una frontera simple</option>
+                      <option value="xor">X cruzada — Medio, requiere combinar reglas</option>
+                      <option value="spiral">Espiral — Difícil, mucha variedad de datos</option>
+                    </select>
+                    <p class="ctl-hint">
+                      La espiral es muy compleja. Si la IA no tiene suficientes "Neuronas", jamás podrá resolverla, sin importar cuánto tiempo la dejes entrenando.
+                    </p>
+                  </div>
+
+                  <div class="ctl">
+                    <div class="ctl-head"><span>Tamaño del Cerebro (Neuronas)</span><b id="v-hidden">6</b></div>
+                    <input type="range" id="sim-hidden" min="1" max="16" step="1" value="6" aria-describedby="h-hidden" />
+                    <p class="ctl-hint" id="h-hidden">Más neuronas le dan más poder a la IA para entender problemas complejos (mayor variedad).</p>
+                  </div>
+
+                  <div class="ctl">
+                    <div class="ctl-head"><span>Velocidad de Aprendizaje</span><b id="v-lr">0,14</b></div>
+                    <input type="range" id="sim-lr" min="0" max="100" step="1" value="36" aria-describedby="h-lr" />
+                    <p class="ctl-hint" id="h-lr">
+                      Baja: aprende seguro pero muy lento. Alta: intenta aprender tan rápido que se "salta" la respuesta correcta y se vuelve inestable.
+                    </p>
+                  </div>
+
+                  <div class="ctl">
+                    <div class="ctl-head"><span>Datos Basura (Ruido)</span><b id="v-noise">0,10</b></div>
+                    <input type="range" id="sim-noise" min="0" max="60" step="1" value="10" aria-describedby="h-noise" />
+                    <p class="ctl-hint" id="h-noise">
+                      Desordena los puntos a propósito. Demasiado ruido hace imposible que la IA encuentre un patrón claro.
+                    </p>
+                  </div>
+
+                  <label class="switch" for="sim-feedback">
+                    <span><i class="fa-solid fa-rotate" aria-hidden="true"></i> Aprender de los errores (Retroalimentación)</span>
+                    <input type="checkbox" id="sim-feedback" checked />
+                  </label>
+                  <p class="ctl-hint" style="margin-top: -0.4rem">
+                    Si lo apagas, la IA se vuelve "sorda" y no puede corregir sus equivocaciones. Un software sin avisos de error (logs/try-catch) es igual.
+                  </p>
+
+                  <div class="btn-row">
+                    <button class="btn btn--danger" type="button" id="sim-shock" style="width: 100%">
+                      <i class="fa-solid fa-bolt" aria-hidden="true"></i> Generar Caos Repentino
+                    </button>
+                  </div>
+                  <p class="ctl-hint" style="margin-top: -0.4rem">
+                    Desordena la memoria de la IA de un solo golpe. Si "Aprender de los errores" está activo, la IA se recuperará. Si está apagado, quedará rota para siempre.
+                  </p>
+                </div>
+              </div>
+
+              <noscript>
+                <p class="js-fallback">
+                  El simulador requiere JavaScript activo y un navegador con soporte de canvas.
+                </p>
+              </noscript>
+            </div>
+          </div>
+
+          <div class="grid g3" style="margin-top: 1.25rem">
+            <article class="card">
+              <span class="chip chip--w1">experimento 1</span>
+              <h3 style="margin-top: 0.6rem">Aprender demasiado rápido</h3>
+              <p class="dim" style="font-size: 0.9rem; margin: 0">
+                Sube la "Velocidad de Aprendizaje" al máximo. Verás que la gráfica de error salta por todos lados. 
+                Si intentas arreglar un error en tu código web a lo loco sin pensar, solo generarás más errores.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip chip--w2">experimento 2</span>
+              <h3 style="margin-top: 0.6rem">Volar a ciegas (Lazo abierto)</h3>
+              <p class="dim" style="font-size: 0.9rem; margin: 0">
+                Espera a que el error baje casi a cero. Luego, APAGA "Aprender de los errores" y presiona "Generar Caos Repentino". 
+                El error subirá y nunca bajará. Un sistema que no revisa sus errores está condenado a romperse.
+              </p>
+            </article>
+            <article class="card">
+              <span class="chip chip--w3">experimento 3</span>
+              <h3 style="margin-top: 0.6rem">Cerebro muy pequeño</h3>
+              <p class="dim" style="font-size: 0.9rem; margin: 0">
+                Elige "Espiral" (Difícil) y baja el tamaño del cerebro a 2 Neuronas. Por más intentos que haga, nunca resolverá el problema. 
+                Problemas complejos requieren herramientas (o códigos) con capacidad de manejar alta variedad.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           07 · Homeostasis cognitiva
+           ================================================================= -->
+      <section class="section section--alt" id="homeostasis" aria-labelledby="homeo-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 04 · Arquitecturas de próxima generación</p>
+            <h2 id="homeo-title">Agentes Inteligentes <span>· la IA como guardián de tu código</span></h2>
+            <p class="lede">
+              El uso más interesante de la IA en la programación web no es generar código. Es usar la IA como un 
+              <strong>Agente Autónomo</strong>: un programa capaz de leer los errores de un servidor, decidir cómo arreglarlos 
+              (por ejemplo, reiniciar la base de datos) y actuar por sí mismo para mantener tu aplicación viva.
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-bar">
+              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="panel-title mono">lazo-agéntico.md — un termostato con un LLM adentro</span>
+            </div>
+            <div class="panel-body">
+              <div class="grid g2">
+                <div>
+                  <p>
+                    Un agente bien diseñado no es solo "un chat de IA". Es un ciclo continuo (lazo) que le da a la IA manos y ojos para interactuar con tu servidor. Sus 5 pasos son:
+                  </p>
+                  <dl style="margin: 0">
+                    <div class="kv">
+                      <dt>1 · Leer (Sensar)</dt>
+                      <dd>La IA revisa los logs de errores o el tráfico del servidor.</dd>
+                    </div>
+                    <div class="kv">
+                      <dt>2 · Comparar</dt>
+                      <dd>Revisa si la web está funcionando bien o si está lenta y a punto de caerse.</dd>
+                    </div>
+                    <div class="kv">
+                      <dt>3 · Pensar (Decidir)</dt>
+                      <dd>La IA analiza el error y busca la mejor solución posible.</dd>
+                    </div>
+                    <div class="kv">
+                      <dt>4 · Actuar</dt>
+                      <dd>Se le da permiso para ejecutar comandos: reiniciar un servicio o avisar a un humano.</dd>
+                    </div>
+                    <div class="kv">
+                      <dt>5 · Verificar</dt>
+                      <dd>Revisa si su acción arregló el problema. Si no, intenta de nuevo o se detiene.</dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <figure class="code" style="margin: 0">
+                  <figcaption><i class="fa-solid fa-shield-halved" aria-hidden="true"></i> bot-guardian · código simplificado de un Agente</figcaption>
+                  <pre><span class="t-key">async function</span> <span class="t-fn">cicloDelAgente</span>(servidor, reglas) {
+  <span class="t-key">while</span> (reglas.<span class="t-fn">activo</span>()) {
+    <span class="t-key">const</span> estado = <span class="t-key">await</span> servidor.<span class="t-fn">leerLogs</span>();         <span class="t-com">// 1 leer</span>
+    <span class="t-key">const</span> error = <span class="t-fn">desviacion</span>(estado, politica.slo);   <span class="t-com">// 2 comparador</span>
+    <span class="t-key">if</span> (error.magnitud &lt; politica.histeresis) <span class="t-key">continue</span>;
+
+    <span class="t-key">const</span> plan = <span class="t-key">await</span> agente.<span class="t-fn">decidir</span>(estado, error);  <span class="t-com">// 3 alta variedad</span>
+
+    <span class="t-com">// FRONTERA: el plan es una propuesta, no una orden.</span>
+    <span class="t-key">if</span> (!<span class="t-fn">validarEsquema</span>(plan)) { <span class="t-fn">rechazar</span>(plan); <span class="t-key">continue</span>; }
+    <span class="t-key">if</span> (!politica.<span class="t-fn">permite</span>(plan.accion)) { <span class="t-fn">escalarAHumano</span>(plan); <span class="t-key">continue</span>; }
+    <span class="t-key">if</span> (presupuesto.<span class="t-fn">agotado</span>()) { <span class="t-fn">abrirLazo</span>(<span class="t-str">"límite de gasto"</span>); <span class="t-key">break</span>; }
+
+    <span class="t-key">await</span> sistema.<span class="t-fn">actuar</span>(plan.accion);                <span class="t-com">// 4 actuador</span>
+    <span class="t-key">await</span> <span class="t-fn">esperar</span>(politica.retardoDelSensor);        <span class="t-com">// evita oscilación</span>
+    <span class="t-key">const</span> despues = <span class="t-key">await</span> sistema.<span class="t-fn">sensar</span>();       <span class="t-com">// 5 verificar</span>
+
+    <span class="t-key">if</span> (<span class="t-fn">empeoro</span>(despues, estado)) {
+      <span class="t-key">await</span> sistema.<span class="t-fn">revertir</span>(plan);
+      <span class="t-fn">abrirLazo</span>(<span class="t-str">"la corrección amplificó el error"</span>);   <span class="t-com">// interruptor</span>
+    }
+  }
+}</pre>
+                </figure>
+              </div>
+            </div>
+          </div>
+
+          <h3 style="margin: 2rem 0 0.75rem; font-size: 1.2rem">Peligros de dejarle el servidor a una IA</h3>
+
+          <div class="grid g4">
+            <article class="card" style="border-top: 2px solid var(--rose)">
+              <h3>El Bot se vuelve loco</h3>
+              <p class="dim" style="font-size: 0.88rem; margin: 0">
+                La IA intenta arreglar un error, pero su propia acción causa un error peor. Al intentarlo de nuevo, destruye el servidor (bucle infinito).
+              </p>
+              <p class="mono" style="font-size: 0.76rem; color: var(--emerald); margin: 0.6rem 0 0">
+                Solución: Limitar cuántas acciones seguidas puede hacer.
+              </p>
+            </article>
+            <article class="card" style="border-top: 2px solid var(--amber)">
+              <h3>Reacción tardía</h3>
+              <p class="dim" style="font-size: 0.88rem; margin: 0">
+                La IA lee un error de hace 5 minutos, intenta arreglarlo ahora, pero el problema ya había pasado. Termina dañando algo que estaba bien.
+              </p>
+              <p class="mono" style="font-size: 0.76rem; color: var(--emerald); margin: 0.6rem 0 0">
+                Solución: Asegurarse de que lea datos en tiempo real.
+              </p>
+            </article>
+            <article class="card" style="border-top: 2px solid var(--violet)">
+              <h3>IA con demasiado poder</h3>
+              <p class="dim" style="font-size: 0.88rem; margin: 0">
+                Le diste permisos de administrador a la IA "para que haga todo". Una mala decisión de la IA borra toda la base de datos de usuarios.
+              </p>
+              <p class="mono" style="font-size: 0.76rem; color: var(--emerald); margin: 0.6rem 0 0">
+                Solución: Privilegio mínimo (solo darle permiso para reiniciar servicios).
+              </p>
+            </article>
+            <article class="card" style="border-top: 2px solid var(--cyan)">
+              <h3>Reglas oxidadas</h3>
+              <p class="dim" style="font-size: 0.88rem; margin: 0">
+                Actualizaste tu página web, pero no le avisaste a la IA. La IA sigue intentando arreglar errores usando las reglas de la versión vieja.
+              </p>
+              <p class="mono" style="font-size: 0.76rem; color: var(--emerald); margin: 0.6rem 0 0">
+                Solución: Revisión constante de las instrucciones del Agente.
+              </p>
+            </article>
+          </div>
+
+          <div class="callout" style="margin-top: 1.5rem">
+            <p class="callout-title"><i class="fa-solid fa-user-shield" aria-hidden="true"></i> El Humano siempre es el jefe</p>
+            <p style="margin-bottom: 0">
+              Nunca dejes que un Agente IA tome decisiones destructivas por sí solo (como borrar una base de datos o hacer un cobro a un cliente).
+              Las acciones irreversibles siempre deben detenerse y preguntarle a un programador humano: "¿Apruebas esta acción?".
+              La IA sugiere y repara lo rápido; el humano toma las decisiones críticas.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           08 · Micro-reto
+           ================================================================= -->
+      <section class="section" id="reto" aria-labelledby="reto-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 04 · Transferencia</p>
+            <h2 id="reto-title">Micro-reto Arquitectónico <span>· arma tu primera app web</span></h2>
+            <p class="lede">
+              Ocho zonas de tu servidor están vacías. Tienes una lista de componentes (Frontend, Backend, Base de Datos, IA, etc.).
+              Arrastra el componente correcto a su zona correspondiente. ¡Cuidado con las trampas comunes de los novatos!
+            </p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-bar">
+              <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+              <span class="panel-title mono">arquitectura-resiliente.lab</span>
+              <span class="spacer"></span>
+              <span class="mono" id="lab-progress">0 / 8 zonas</span>
+            </div>
+            <div class="panel-body">
+              <div class="lab">
+                <div class="tray" id="lab-tray">
+                  <h3>Componentes disponibles</h3>
+                  <p class="mono mute" style="font-size: 0.7rem; margin: 0 0 0.4rem">
+                    // arrastra, o selecciona y luego pulsa una zona
+                  </p>
+                  <div id="lab-pieces"></div>
+                  <div class="btn-row" style="margin-top: 0.6rem">
+                    <button class="btn btn--sm" type="button" id="lab-reset" style="width: 100%">
+                      <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Reiniciar tablero
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="board" id="lab-board"></div>
+
+                  <div class="panel" style="margin-top: 1rem">
+                    <div class="panel-bar">
+                      <span class="panel-title mono">evaluación por principios sistémicos</span>
+                      <span class="spacer"></span>
+                      <span class="mono" id="lab-score">—</span>
+                    </div>
+                    <div class="panel-body">
+                      <div class="bars" id="lab-bars"></div>
+                      <div id="lab-verdict" aria-live="polite" style="margin-top: 1rem"></div>
+                      <div class="btn-row" style="margin-top: 1rem">
+                        <button class="btn" type="button" id="lab-export">
+                          <i class="fa-solid fa-file-export" aria-hidden="true"></i> Generar acta de diseño
+                        </button>
+                        <button class="btn btn--sm" type="button" id="lab-copy">
+                          <i class="fa-regular fa-copy" aria-hidden="true"></i> Copiar
+                        </button>
+                      </div>
+                      <label class="sr-only" for="lab-output">Acta de diseño sistémico generada</label>
+                      <textarea
+                        id="lab-output"
+                        rows="10"
+                        readonly
+                        placeholder="El acta se genera cuando completes las ocho zonas."
+                        style="margin-top: 0.8rem"
+                      ></textarea>
+                      <p class="mono mute" style="font-size: 0.7rem; margin: 0.5rem 0 0">
+                        // el acta se produce localmente en tu navegador; no se envía a ningún servidor
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <noscript>
+                <p class="js-fallback">El micro-reto requiere JavaScript activo.</p>
+              </noscript>
+            </div>
+          </div>
+
+          <div class="callout callout--law" style="margin-top: 1.5rem">
+            <p class="callout-title"><i class="fa-solid fa-list-check" aria-hidden="true"></i> Criterio de transferencia</p>
+            <p style="margin-bottom: 0">
+              Llévate esta pregunta a tu proyecto real, no al ejercicio: <strong>¿dónde está la frontera,
+              dónde está el sensor, dónde está el actuador y qué abre el lazo cuando la corrección
+              empeora las cosas?</strong> Una arquitectura que no puede responder esas cuatro preguntas no
+              es resiliente; simplemente todavía no ha sido perturbada lo suficiente.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           09 · Verificación
+           ================================================================= -->
+      <section class="section section--alt" id="verificacion" aria-labelledby="verif-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Fase 03 · Apropiación · verificación</p>
+            <h2 id="verif-title">Verificación conceptual</h2>
+            <p class="lede">
+              Ocho preguntas de criterio. Cada respuesta muestra el razonamiento sistémico completo, acertada
+              o no: el objetivo es el modelo mental, no la puntuación.
+            </p>
+          </div>
+
+          <div id="quiz-app" v-cloak>
+            <div class="quiz-q" v-for="(q, i) in quiz" :key="i">
+              <h3><span class="qn">{{ String(i + 1).padStart(2, '0') }}</span><span>{{ q.q }}</span></h3>
+              <div class="opts">
+                <button
+                  v-for="(o, j) in q.opts"
+                  :key="j"
+                  type="button"
+                  class="opt"
+                  :data-r="verdict(i, j)"
+                  :disabled="answered[i] !== null"
+                  @click="answer(i, j)"
+                >
+                  <span class="o-key" aria-hidden="true">{{ 'ABCD'[j] }}</span>
+                  <span>{{ o }}</span>
+                </button>
+              </div>
+              <p v-if="answered[i] !== null" class="quiz-why">
+                <strong>{{ answered[i] === q.a ? 'Correcto.' : 'Revisemos.' }}</strong> {{ q.why }}
+              </p>
+            </div>
+
+            <div class="panel" v-if="done">
+              <div class="panel-bar">
+                <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span class="panel-title mono">resultado.log</span>
+              </div>
+              <div class="panel-body">
+                <p style="margin-bottom: 0.5rem">
+                  <strong class="mono" style="font-size: 1.3rem">{{ score }} / {{ quiz.length }}</strong>
+                  &nbsp;<span class="dim">criterios sistémicos correctos</span>
+                </p>
+                <p class="dim" style="margin-bottom: 0.8rem">{{ feedback }}</p>
+                <button class="btn btn--sm" type="button" @click="reset">
+                  <i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Reintentar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================
+           10 · Glosario
+           ================================================================= -->
+      <section class="section" id="glosario" aria-labelledby="glo-title">
+        <div class="wrap">
+          <div class="sec-head">
+            <p class="kicker">Referencia</p>
+            <h2 id="glo-title">Glosario operativo</h2>
+            <p class="lede">
+              Vocabulario mínimo para discutir arquitectura en términos de sistemas. Cada término está
+              redactado para ser usado en una revisión de diseño, no para ser memorizado.
+            </p>
+          </div>
+
+          <div id="glossary-app" v-cloak>
+            <div class="glo-search">
+              <label class="sr-only" for="glo-q">Filtrar términos del glosario</label>
+              <input type="text" id="glo-q" v-model="q" placeholder="filtrar: entropía, frontera, lazo…" />
+            </div>
+            <p class="mono mute" style="font-size: 0.74rem">// {{ filtered.length }} de {{ items.length }} términos</p>
+            <div class="glo-grid">
+              <article class="glo-item" v-for="g in filtered" :key="g.t">
+                <h3>{{ g.t }} <span class="glo-eng">· {{ g.e }}</span></h3>
+                <p>{{ g.d }}</p>
+              </article>
+            </div>
+            <p v-if="filtered.length === 0" class="dim">Sin coincidencias para «{{ q }}».</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===================================================================
+         Pie
+         =================================================================== -->
+    <footer class="site-footer">
+      <div class="wrap foot-grid">
+        <div>
+          <h4>Guía 5 · TGS</h4>
+          <p style="margin: 0">
+            Teoría General de Sistemas aplicada a la evolución de la arquitectura de software y a la
+            Inteligencia Artificial. Material formativo; la valoración del aprendizaje corresponde al
+            instructor.
+          </p>
+        </div>
+        <div>
+          <h4>Fuentes conceptuales</h4>
+          <ul>
+            <li>Bertalanffy, L. von — <em>General System Theory</em> (1968)</li>
+            <li>Wiener, N. — <em>Cybernetics</em> (1948)</li>
+            <li>Ashby, W. R. — <em>An Introduction to Cybernetics</em> (1956)</li>
+            <li>Holland, J. — <em>Complex Adaptive Systems</em> (1992)</li>
+            <li>Prigogine, I. — estructuras disipativas (1977)</li>
+            <li>Lehman, M. — leyes de la evolución del software (1980)</li>
+            <li>Schaeffer, Miranda &amp; Koyejo — sobre capacidades emergentes (2023)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Procesamiento</h4>
+          <ul>
+            <li>Todo se ejecuta en tu navegador</li>
+            <li>Sin envío de datos ni analítica</li>
+            <li>Sin credenciales ni almacenamiento remoto</li>
+            <li>Progreso local opcional (localStorage)</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Navegación rápida</h4>
+          <ul>
+            <li><a href="#reflexion">Diagnóstico sistémico</a></li>
+            <li><a href="#olas">Las tres olas</a></li>
+            <li><a href="#evolucion">Mapa evolutivo</a></li>
+            <li><a href="#simulador">Simulador</a></li>
+            <li><a href="#reto">Micro-reto</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

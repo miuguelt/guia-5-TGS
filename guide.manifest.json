@@ -1,0 +1,195 @@
+{
+  "standard": {
+    "id": "devbrain.educational-guide",
+    "version": "2.0.0"
+  },
+  "guide": {
+    "id": "adso-tgs-guia-05-web-2026",
+    "title": "Guía 05 web - Teoría General de Sistemas, arquitectura de software e Inteligencia Artificial",
+    "format": "html",
+    "language": "es-CO",
+    "version": "1.0",
+    "sourceDocument": "index.html"
+  },
+  "curricularAlignment": {
+    "program": {
+      "name": "Análisis y Desarrollo de Software",
+      "code": "228118"
+    },
+    "competency": {
+      "code": "NO_INFORMADO_EN_LA_FUENTE",
+      "name": "Fundamentación sistémica del análisis y diseño de software",
+      "sourceStatus": "El encargo no informa código de competencia; no se inventa."
+    },
+    "learningResults": [
+      "Explicar el comportamiento de un sistema de software en términos de frontera, acoplamiento, retroalimentación, entropía y variedad requerida.",
+      "Relacionar la evolución de los paradigmas de arquitectura con los principios de la Teoría General de Sistemas.",
+      "Interpretar el aprendizaje automático y los modelos generativos como sistemas complejos adaptativos.",
+      "Diseñar una arquitectura que integre un subsistema cognitivo respetando fronteras, lazos de control y reducción de entropía."
+    ],
+    "projectPhase": "Análisis / fundamentación arquitectónica",
+    "projectActivity": "Diagnosticar sistémicamente una arquitectura propia y proponer un diseño resiliente con IA como subsistema regulador."
+  },
+  "project": {
+    "challenge": "Pasar de depurar síntomas locales a diagnosticar y diseñar en el nivel del sistema, incluyendo el caso en el que un subsistema probabilístico entra al lazo de control.",
+    "inputFromPreviousGuide": "Guía 4: Sprint planeado con historias trazables, criterios de terminado y tablero de flujo.",
+    "finalProduct": "Acta de diseño sistémico: asignación por zonas (frontera, acoplamiento, estado, subsistema cognitivo, control de entropía, sensor, actuador y amortiguador), evaluación por principios y preguntas de traslado al proyecto real.",
+    "outputToNextStage": "Criterios sistémicos verificables para la construcción: dónde está la frontera, qué sensor mide la desviación, qué actuador corrige y qué abre el lazo.",
+    "checkpoints": [
+      {
+        "id": "G5-C1",
+        "evidence": "Diagnóstico sistémico de síntomas propios.",
+        "criterion": "Nombra la propiedad del sistema que produce el síntoma, no la línea de código donde se observa."
+      },
+      {
+        "id": "G5-C2",
+        "evidence": "Bitácora del simulador con los tres experimentos ejecutados.",
+        "criterion": "Distingue ganancia excesiva, lazo abierto y déficit de variedad requerida a partir de la evidencia observada."
+      },
+      {
+        "id": "G5-C3",
+        "evidence": "Acta de diseño del micro-reto con evaluación por principios.",
+        "criterion": "Cada componente se justifica por su función sistémica y la salida probabilística queda contenida antes de tocar el estado autoritativo."
+      }
+    ]
+  },
+  "learningSequence": [
+    {
+      "phase": "reflection",
+      "name": "Reflexión inicial",
+      "purpose": "Reconocer que los fallos recurrentes son propiedades del sistema, no defectos locales.",
+      "output": "Diagnóstico sistémico por síntomas."
+    },
+    {
+      "phase": "contextualization",
+      "name": "Contextualización",
+      "purpose": "Situar las tres olas de la TGS y su huella directa en la evolución de la arquitectura de software.",
+      "output": "Mapa evolutivo TGS ↔ arquitectura y matriz de correspondencias."
+    },
+    {
+      "phase": "appropriation",
+      "name": "Apropiación",
+      "purpose": "Manipular un sistema adaptativo real: perturbarlo, abrir el lazo y observar la recuperación del equilibrio.",
+      "output": "Simulación instrumentada y verificación conceptual."
+    },
+    {
+      "phase": "transfer",
+      "name": "Transferencia",
+      "purpose": "Diseñar una arquitectura con IA que respete fronteras, lazos de control y reducción de entropía.",
+      "output": "Acta de diseño sistémico exportable."
+    }
+  ],
+  "evidence": {
+    "knowledge": [
+      "Explicación de frontera, cohesión, acoplamiento, homeostasis, entropía, negentropía, variedad requerida, equifinalidad, emergencia y autoorganización.",
+      "Lectura de la retropropagación como lazo cibernético y de la entropía cruzada como medida de incertidumbre."
+    ],
+    "performance": [
+      "Ejecución de los tres experimentos del simulador con interpretación sistémica de cada resultado.",
+      "Resolución del micro-reto arquitectónico identificando y descartando los señuelos."
+    ],
+    "product": [
+      "Acta de diseño sistémico trazable hacia la construcción y la operación."
+    ]
+  },
+  "assessment": {
+    "instruments": [
+      {
+        "type": "diagnostic-checklist",
+        "name": "Diagnóstico sistémico por síntomas"
+      },
+      {
+        "type": "simulation-log",
+        "name": "Bitácora de eventos del simulador de red neuronal"
+      },
+      {
+        "type": "design-rubric",
+        "name": "Evaluación por principios sistémicos del micro-reto"
+      },
+      {
+        "type": "concept-check",
+        "name": "Verificación conceptual de ocho ítems con justificación"
+      }
+    ],
+    "decisionAuthority": "El juicio evaluativo corresponde al instructor. Los artefactos interactivos sólo entregan retroalimentación formativa."
+  },
+  "interactiveArtifacts": [
+    {
+      "id": "diagnostico-sistemico",
+      "type": "vue-island",
+      "file": "js/app.js",
+      "purpose": "Traduce síntomas de ingeniería a diagnósticos de la TGS con la palanca correspondiente."
+    },
+    {
+      "id": "explorador-olas",
+      "type": "vue-island",
+      "file": "js/app.js",
+      "purpose": "Compara las tres olas: tesis, concepto núcleo, analogía, modo de fallo y huella en software."
+    },
+    {
+      "id": "mapa-evolutivo",
+      "type": "svg-generativo",
+      "file": "js/evolution-map.js",
+      "purpose": "Infografía generada desde datos que alinea las olas de la TGS con siete eras de arquitectura. Vista alterna en grafo Mermaid."
+    },
+    {
+      "id": "simulador-sistemico",
+      "type": "canvas-sandbox",
+      "file": "js/neural-sim.js",
+      "purpose": "Red 2→H→1 con retropropagación propia. Permite variar ganancia del lazo, variedad del regulador y entropía del entorno, inyectar choques y abrir la retroalimentación."
+    },
+    {
+      "id": "micro-reto-arquitectonico",
+      "type": "drag-and-drop",
+      "file": "js/architecture-lab.js",
+      "purpose": "Ocho zonas con función sistémica, doce componentes (cuatro señuelos) y evaluación por cinco principios. Genera acta exportable."
+    }
+  ],
+  "webQuality": {
+    "mobileFirst": true,
+    "supportedViewportRange": "320-2560",
+    "accessibilityTarget": "WCAG 2.2 AA",
+    "offlineCore": false,
+    "offlineNotes": "El texto, la hoja de estilo y los cinco artefactos interactivos funcionan sin red. Sólo dependen de CDN: Tailwind (capa de utilidades), Vue (islas reactivas, con aviso de reemplazo), Mermaid (vista alterna del mapa), Font Awesome y las tipografías.",
+    "browserSecretsAllowed": false,
+    "officialCertificate": false,
+    "dataProcessing": "Todo el procesamiento ocurre en el navegador. El progreso opcional se guarda en localStorage bajo la clave tgs.guia5.v1. No hay envío de datos ni analítica."
+  },
+  "sources": [
+    {
+      "title": "Bertalanffy, L. von — General System Theory (1968)",
+      "use": "Sistema abierto, frontera, homeostasis, equifinalidad e isomorfismo."
+    },
+    {
+      "title": "Wiener, N. — Cybernetics (1948)",
+      "use": "Lazo de control: sensor, comparador y actuador."
+    },
+    {
+      "title": "Ashby, W. R. — An Introduction to Cybernetics (1956)",
+      "use": "Ley de la variedad requerida, eje argumental del salto a lo probabilístico."
+    },
+    {
+      "title": "Holland, J. — Complex Adaptive Systems (1992)",
+      "use": "Marco de sistemas complejos adaptativos aplicado a la IA."
+    },
+    {
+      "title": "Prigogine, I. — Estructuras disipativas (1977)",
+      "use": "Orden local sostenido por flujo de energía; lectura del entrenamiento como proceso negentrópico."
+    },
+    {
+      "title": "Lehman, M. — Leyes de la evolución del software (1980)",
+      "use": "Complejidad creciente en sistemas en evolución; entropía estructural."
+    },
+    {
+      "title": "Schaeffer, Miranda & Koyejo — Are Emergent Abilities of Large Language Models a Mirage? (2023)",
+      "use": "Matiz honesto sobre la forma de las curvas de capacidades emergentes."
+    }
+  ],
+  "changeControl": [
+    {
+      "version": "1.0",
+      "date": "2026-08-07",
+      "reason": "Creación de la guía: fundamentos de TGS y tres olas, evolución sistémica del software hasta la IA, lectura sistémica del aprendizaje automático, homeostasis cognitiva y micro-reto de transferencia."
+    }
+  ]
+}

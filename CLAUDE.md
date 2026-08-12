@@ -1,0 +1,76 @@
+# DevBrain — estándar canónico de desarrollo multi-IDE
+
+**Versión:** 7.0 · **Fecha:** 2026-08-01
+
+## 1. Autoridad y contexto
+
+1. Para estado operativo mandan, en orden: `AI-SESSION-BRIEF.md`, `AI-CURRENT-CONFIG.md`, `_core/DEVBRAIN_RUNTIME_POLICY.md`, el `AGENTS.md` del proyecto y este estándar.
+2. Al iniciar sesión se consulta `devbrain_brief`. Para cada tarea se consulta `devbrain_task_context` con la intención concreta y, si aplica, el proyecto.
+3. Para arquitectura, impacto, dependencias, depuración o refactor se consulta Codebase Memory antes de verificar los archivos exactos. Tras cambios estructurales se refresca el índice.
+4. Las referencias históricas nunca reemplazan la configuración vigente.
+
+## 2. Runtime Windows nativo
+
+- PostgreSQL 18: `127.0.0.1:5434`, servicio `postgresql-x64-18`.
+- Memurai: `127.0.0.1:6380`, servicio `Memurai`.
+- Gateway MCP único: `127.0.0.1:8010`. Dashboard: `127.0.0.1:8051`.
+- No usar WSL, Docker, Qdrant, SearXNG, Redis 6379 ni inferencia LLM local.
+- `devbrain start` inicia únicamente el núcleo compartido. Los proyectos se inician explícitamente con `devbrain start <proyecto>` o su script autorizado.
+- Los MCP stdio no son servicios HTTP y no se levantan manualmente con puertos.
+
+## 3. Credenciales y seguridad
+
+- Windows Credential Manager es la fuente preferida. Un `.env` local, ignorado y protegido solo se permite cuando el runtime lo requiere.
+- Nunca guardar secretos en JSON/JSONC, Markdown, código, prompts, logs, snapshots, argumentos de comandos ni configuraciones de IDE.
+- No leer, mostrar ni copiar el contenido de `.env` o credenciales salvo que la tarea lo requiera expresamente y exista un flujo seguro.
+- Todo secreto expuesto se elimina de la superficie activa y se rota de forma coordinada.
+- Antes de commit se ejecutan el detector de secretos y `validate-rules.ps1`.
+
+## 4. Autonomía objetiva
+
+- Investigar, leer, comparar, probar y diagnosticar proactivamente dentro del alcance solicitado.
+- Modificar únicamente lo autorizado por la tarea. No reparar otros proyectos “en caliente”, no arrancar aplicaciones implícitamente y no hacer cambios destructivos por intuición.
+- Si una decisión cambia arquitectura, datos, credenciales o alcance, presentar evidencia y detenerse cuando falte autoridad material.
+- Informar resultado, alcance, verificación, riesgos y bloqueos; no afirmar éxito sin evidencia.
+
+## 5. Código y calidad
+
+- Código, identificadores y comentarios técnicos en inglés donde el repositorio ya lo use; comunicación al operador en español.
+- No dejar código comentado, mocks que suplanten datos persistentes ni binarios en directorios de código.
+- Go mínimo 1.25, módulos `github.com/devbrain/`, sin `panic()` en handlers y sin IP/puertos hardcodeados.
+- Los errores para el operador deben ser claros, accionables y en español.
+- Aplicar el estilo, pruebas, linters y `AGENTS.md` específicos del proyecto.
+- **TDD Autónomo Obligatorio**: Al desarrollar una nueva lógica de negocio, función o corregir un bug, el agente debe escribir primero la prueba unitaria (Test) que demuestre el comportamiento esperado, y confirmar que falla, antes de escribir o modificar el código de la aplicación para hacerla pasar.
+
+## 6. UI, legibilidad y Colombia
+
+- Interfaz en español de Colombia (`es-CO`), con fechas y números que declaren el locale.
+- Nunca truncar contenido con `text-overflow: ellipsis` como primera opción: antes de perder texto hay que ajustar el tamaño de la letra al espacio disponible. Cuando la caja no puede crecer de alto (celdas, listas, chrome compacto), se encoge primero y solo se recortan los caracteres que aún no quepan. La reducción tiene un suelo absoluto de legibilidad (11 px); por debajo se recorta o se envuelve, nunca se sigue encogiendo.
+- Una palabra nunca se parte a la mitad: lo que cede es el tamaño de la letra. Prohibidos `word-break: break-word`, `word-break: break-all` y la clase `break-all` sobre texto en lenguaje natural, porque reducen `min-content` a un carácter y el contenedor se encoge por debajo de la palabra. Para texto que no cabe se usa ajuste tipográfico al contenedor (`FitText`/`useFitText` o `clamp()` con unidades `cqi`); el corte a la brava solo se autoriza explícitamente y en cadenas sin espacios (identificadores, hashes, URLs, correos).
+- Mobile-first desde 320 px y soporte hasta 2560 px. Usar `clamp()`, Grid con `minmax()` y breakpoints ascendentes.
+- Tablas y bloques de código: scroll horizontal seguro; bloques de código con `white-space: pre-wrap` y `word-break: break-word`.
+- Contraste suficiente, fondos sólidos para texto y estados legibles sin depender solo del color.
+- En HTML, escapar `<` y `>` dentro de ejemplos de código y cerrar siempre `<textarea></textarea>`.
+
+## 7. Verificación y sincronización
+
+1. Después de editar este archivo: `./sync-rules.ps1 -Apply`.
+2. Antes de commit: `./validate-rules.ps1` y el hook anti-secretos.
+3. Tras cambios DevBrain: sincronizar conocimiento en modo estricto, validar configuración canónica, sincronizar IDEs y ejecutar las pruebas MCP.
+4. Verificar el gateway en `/health`, los puertos canónicos y el contexto de tareas representativas.
+5. Un fallo de validación bloquea el commit; un hook posterior solo actualiza índices y nunca sustituye la validación previa.
+
+## 8. Registro automático de proyectos (v8.7 Zero-Touch)
+
+- Todo proyecto nuevo alojado en `_projects/` o en la raíz de Aplicaciones debe ser registrado automáticamente en el ecosistema.
+- El registro se activa de forma transparente mediante el auto-descubrimiento en `Sync-DashboardProjects.ps1`, el arranque del ecosistema (`START-DEVBRAIN.ps1`) y el script `New-DevBrainProject.ps1`.
+- Al crear una nueva carpeta o proyecto bajo `_projects/`, el agente debe asegurar que el auto-registro complete la sincronización en `_core/config.yml`, `port-registry.json`, `devbrain-runtime-manifest.json` y PostgreSQL `master_db`.
+
+## 9. Creación de Guías y Recursos Educativos (DevBrain Learner SDK)
+
+- Toda nueva guía interactiva o recurso educativo creado en la plataforma debe utilizar obligatoriamente el `devbrain-learner-sdk` (vía IIFE bundle o importación ES6).
+- **Prohibido** crear o copiar archivos manuales como `gamification.js` o lógica de simuladores duplicada. Todo el manejo de XP, logros, navegación (SPA) y persistencia debe inicializarse centralmente mediante `window.DevBrainSDK.createApp()`.
+- Al recibir una petición para construir o mejorar una guía, DevBrain debe inyectar automáticamente este SDK e instanciar la plataforma consumiendo sus herramientas nativas (Builders y Simuladores).
+- El agente debe auto-seleccionar el contexto, skills y herramientas relevantes para guías interactivas sin necesidad de que el operador lo exija explícitamente.
+
+Este archivo es el estándar de desarrollo distribuido a los proyectos. No reemplaza las fuentes de autoridad operativa indicadas en la sección 1.
