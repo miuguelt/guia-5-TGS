@@ -1,0 +1,16 @@
+.git
+.gitignore
+.gitattributes
+.github
+.vscode
+.claude
+.antigravityrules
+.cursorrules
+.windsurfrules
+.opencoderules
+.codexrules
+AGENTS.md
+CLAUDE.md
+docker-compose*.yml
+Dockerfile
+.dockerignore
